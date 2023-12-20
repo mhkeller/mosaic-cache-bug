@@ -1,0 +1,24 @@
+{
+  "name": "mosaic-cache-bug",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "nodemon src/lib/duckdb/bin/run-server.js"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "svelte": "^4.0.5",
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "@uwdata/vgplot": "^0.3.3",
+    "duckdb": "^0.8.1",
+    "nodemon": "^3.0.1",
+    "ws": "^8.14.2",
+    "yaml": "^2.3.2"
+  }
+}
