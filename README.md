@@ -16,13 +16,13 @@ When creating a table from a parquet file using `CREATE OR REPLACE`, the data is
 
 The chart gets reloaded with different data.
 
-[Expected](assets/expected.mov)
+[View screencap](assets/expected.mov)
 
 *Actual result*
 
 The same data is loaded.
 
-[Actual](assets/actual.mov)
+[View screencap](assets/actual.mov)
 
 ## A weird solution
 
