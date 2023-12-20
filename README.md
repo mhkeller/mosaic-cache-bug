@@ -49,4 +49,4 @@ This also fixes it:
 await vg.coordinator().configure({})
 ```
 
-To enable the fix, un-comment line 3 in [`src/App.svelte`](./src/App.svelte).
+To enable the fix, un-comment line 9 in [`src/App.svelte`](https://github.com/mhkeller/mosaic-cache-bug/blob/b4a9c9bd313ef76e0d508adbbcdd4c5602cac9b9/src/App.svelte#L9).
