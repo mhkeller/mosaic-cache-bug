@@ -6,10 +6,7 @@
   let chartElement;
 
   async function loadTable(fileName) {
-    // await vg.coordinator().configure({
-    //   cache: true,
-    //   index: true
-    // })
+    // await vg.coordinator().configure({})
     await vg.coordinator().exec(
       `CREATE OR REPLACE TABLE table_1 AS SELECT * FROM 'http://localhost:5173/data/${fileName}.parquet'`
     );

@@ -49,4 +49,4 @@ This also fixes it:
 await vg.coordinator().configure({})
 ```
 
-To reproduce this, un-comment lines 9-12 in [`src/App.svelte`](./src/App.svelte).
+To enable the fix, un-comment line 3 in [`src/App.svelte`](./src/App.svelte).
