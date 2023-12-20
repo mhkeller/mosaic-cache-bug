@@ -39,8 +39,14 @@ However, it doesn't matter what the value of `cache` here is. The bug is fixed a
 ```js
 await vg.coordinator().configure({
   cache: true,
-	index: true
+  index: true
 })
 ```
 
-To reproduce this, comment out lines 9-12 in [`src/App.svelte`](./src/App.svelte).
+This also fixes it:
+
+```js
+await vg.coordinator().configure({})
+```
+
+To reproduce this, un-comment lines 9-12 in [`src/App.svelte`](./src/App.svelte).
