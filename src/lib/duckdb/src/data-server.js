@@ -1,12 +1,9 @@
 import http from 'node:http';
-import path from 'node:path';
 import url from 'node:url';
 import { WebSocketServer } from 'ws';
 import { Cache, cacheKey } from './Cache.js';
-import { createBundle, loadBundle } from './load/bundle.js';
 
 const CACHE_DIR = '.mosaic/cache';
-const BUNDLE_DIR = '.mosaic/bundle';
 
 export function dataServer(db, {
   cache = true,
@@ -19,10 +16,11 @@ export function dataServer(db, {
   const app = createHTTPServer(handleQuery, rest);
   if (socket) createSocketServer(app, handleQuery);
 
-  app.listen(port);
+  const server = app.listen(port);
   console.log(`Data server running on port ${port}`);
   if (rest) console.log(`  http://localhost:${port}/`);
   if (socket) console.log(`  ws://localhost:${port}/`);
+  return server;
 }
 
 function createHTTPServer(handleQuery, rest) {
@@ -68,7 +66,7 @@ function createSocketServer(server, handleQuery) {
   });
 }
 
-function queryHandler(db, queryCache) {
+export function queryHandler(db, queryCache) {
 
   // retrieve query result
   async function retrieve(query, get) {
@@ -103,7 +101,7 @@ function queryHandler(db, queryCache) {
 
     try {
       const { sql, type = 'json' } = query;
-      console.log(`> ${type.toUpperCase()}${sql ? ' ' + sql : ''}`);
+      console.log(`> ${type.toUpperCase()}${sql ? ` ${sql}` : ''}`);
 
       // process query and return result
       switch (type) {
@@ -119,19 +117,6 @@ function queryHandler(db, queryCache) {
         case 'json':
           // JSON response format
           res.json(await retrieve(query, sql => db.query(sql)));
-          break;
-        case 'create-bundle':
-          // Create a named bundle of precomputed resources
-          await createBundle(
-            db, queryCache, query.queries,
-            path.resolve(BUNDLE_DIR, query.name)
-          );
-          res.done();
-          break;
-        case 'load-bundle':
-          // Load a named bundle of precomputed resources
-          await loadBundle(db, queryCache, path.resolve(BUNDLE_DIR, query.name));
-          res.done();
           break;
         default:
           res.error(`Unrecognized command: ${type}`, 400);
@@ -166,7 +151,7 @@ function httpResponse(res) {
   }
 }
 
-function socketResponse(ws) {
+export function socketResponse(ws) {
   const STRING = { binary: false, fin: true };
   const BINARY = { binary: true, fin: true };
 

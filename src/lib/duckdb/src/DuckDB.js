@@ -3,19 +3,24 @@ import { mergeBuffers } from './merge-buffers.js';
 
 const TEMP_DIR = '.duckdb';
 
-const CONFIG = [
+const DEFAULT_INIT_STATEMENTS = [
   `PRAGMA temp_directory='${TEMP_DIR}'`,
-  `INSTALL arrow`,
+  `INSTALL nanoarrow FROM community`,
   `INSTALL httpfs`,
-  `LOAD arrow`,
+  `LOAD nanoarrow`,
   `LOAD httpfs`
-];
+].join(';\n');
 
 export class DuckDB {
-  constructor(path = ':memory:') {
-    this.db = new duckdb.Database(path);
+  constructor(
+    path = ':memory:',
+    config = {},
+    initStatements = DEFAULT_INIT_STATEMENTS
+  ) {
+    this.db = new duckdb.Database(path, config);
     this.con = this.db.connect();
-    this.exec(CONFIG.join(';\n'));
+    // store initialization promise so that we can wait for it
+    this._init = this.exec(initStatements);
   }
 
   close() {
@@ -110,7 +115,7 @@ export class DuckDBStatement {
 
   arrowBuffer(params) {
     return new Promise((resolve, reject) => {
-      this.con.arrowIPCAll(...params, (err, result) => {
+      this.statement.arrowIPCAll(...params, (err, result) => {
         if (err) {
           reject(err);
         } else {
