@@ -26,7 +26,7 @@ The same data is loaded.
 
 ## A solution
 
-Calling the table something different avoids the cacheing problem. The `App.svelte` file contains some commented out code that fixes the issue.
+Calling the table something different avoids the cacheing problem. The [`App.svelte`](src/App.svelte) file contains some commented out code that fixes the issue.
 
 ```js
 const randomId = Math.random().toString(36).substring(2, 15);
