@@ -7,11 +7,11 @@
     await vg.coordinator().clear({ clients: false, cache: true });
 
     // A random table name will show fresh data
-    const randomId = Math.random().toString(36).substring(2, 15);
-    const tableName = `table_${randomId}`;
+    // const randomId = Math.random().toString(36).substring(2, 15);
+    // const tableName = `table_${randomId}`;
 
     // Reusing the same namespace will show cached data
-    // const tableName = 'table_1';
+    const tableName = 'table_1';
 
     await vg.coordinator().exec(
       vg.loadParquet(

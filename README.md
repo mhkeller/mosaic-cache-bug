@@ -3,7 +3,7 @@ Mosaic cache bug
 
 ## The bug
 
-When creating a table from a parquet file using `CREATE OR REPLACE`, the data is not replaced.
+When creating a table from a parquet file using `.loadParquet` with the `replace: true` option, the data is not replaced.
 
 ## Steps to reproduce
 
@@ -24,29 +24,11 @@ The same data is loaded.
 
 [View screencap](assets/actual.mov)
 
-## A weird solution
+## A solution
 
-I thought the issue was due to Mosaic cacheing the results so I set the following, which fixes the issue:
-
-```js
-await vg.coordinator().configure({
-  cache: false
-})
-```
-
-However, it doesn't matter what the value of `cache` here is. The bug is fixed as long as this configure call is made. For example, setting it to [the defaults](https://github.com/uwdata/mosaic/blob/a3b78fef28fcc3e711bb922c97c3113aa6cf9122/docs/api/core/coordinator.md?plain=1#L43) fixes it:
+Calling the table something different avoids the cacheing problem. The `App.svelte` file contains some commented out code that fixes the issue.
 
 ```js
-await vg.coordinator().configure({
-  cache: true,
-  index: true
-})
+const randomId = Math.random().toString(36).substring(2, 15);
+const tableName = `table_${randomId}`;
 ```
-
-This also fixes it:
-
-```js
-await vg.coordinator().configure({})
-```
-
-To enable the fix, un-comment line 9 in [`src/App.svelte`](https://github.com/mhkeller/mosaic-cache-bug/blob/b4a9c9bd313ef76e0d508adbbcdd4c5602cac9b9/src/App.svelte#L9).
